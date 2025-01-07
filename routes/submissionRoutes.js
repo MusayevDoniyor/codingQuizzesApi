@@ -12,6 +12,20 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/random", async (req, res) => {
+  const count = parseInt(req.query.count) || 1;
+  try {
+    const submissions = await Submission.aggregate([
+      { $sample: { size: count } },
+    ]);
+    console.log(submissions);
+
+    res.json(submissions);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post("/", async (req, res) => {
   const { userId, questionId, selectedOption } = req.body;
 
