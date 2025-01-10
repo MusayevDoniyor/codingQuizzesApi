@@ -19,11 +19,13 @@ app.get("/", (req, res) => {
   res.send("Welcome to the Coding Quizzes API!");
 });
 
-app.use("/api/questions", questionRoutes);
-app.use("/api/submissions", submissionRoutes);
+app.use("/questions", questionRoutes);
+app.use("/submissions", submissionRoutes);
 
 mongoose
-  .connect(mongoConnection)
+  .connect(mongoConnection, {
+    connectTimeoutMS: 20000,
+  })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error(err));
 
