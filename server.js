@@ -24,11 +24,21 @@ app.use("/submissions", submissionRoutes);
 
 mongoose
   .connect(mongoConnection, {
-    connectTimeoutMS: 20000,
+    serverSelectionTimeoutMS: 30000,
+    connectTimeoutMS: 30000,
   })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error(err));
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+});
+
+app.get("/test-connection", async (req, res) => {
+  try {
+    const result = await mongoose.connection.db.admin().ping();
+    res.json({ message: "MongoDB is connected!", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
