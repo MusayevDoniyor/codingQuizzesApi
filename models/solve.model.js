@@ -13,8 +13,8 @@ const solveSchema = new mongoose.Schema(
       required: true,
     },
     selectedOption: { type: String, required: true },
-    isCorrect: { type: Boolean, required: true },
-    points: { type: Number, required: true },
+    isCorrect: { type: Boolean },
+    points: { type: Number, default: 0 },
     time_taken: { type: Number, default: 0 },
   },
   { timestamps: true }

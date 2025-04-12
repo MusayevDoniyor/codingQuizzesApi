@@ -26,8 +26,8 @@ const userSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Question",
         },
-        is_correct: Boolean,
-        point: Number,
+        isCorrect: Boolean,
+        points: Number,
       },
     ],
     role: {
@@ -62,25 +62,7 @@ userSchema.pre("save", async function (next) {
 
 // Parolni tekshirish
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  console.log("Kiritilgan parol:", enteredPassword);
-  console.log("Bazada saqlangan hash:", this.password);
-
-  const isMatch = await bcrypt.compare(enteredPassword, this.password);
-
-  console.log("Mos keldi:", isMatch);
-
-  return isMatch;
+  return await bcrypt.compare(enteredPassword, this.password);
 };
-
-// findOneAndUpdate orqali parolni hash qilish
-userSchema.pre("findOneAndUpdate", async function (next) {
-  const update = this.getUpdate();
-
-  if (update.password) {
-    update.password = await bcrypt.hash(update.password, 10);
-  }
-
-  next();
-});
 
 module.exports = mongoose.model("User", userSchema);

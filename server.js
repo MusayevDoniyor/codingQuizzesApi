@@ -9,6 +9,7 @@ const submissionRoutes = require("./routes/solve.route");
 const authRoutes = require("./routes/auth.route");
 const adminRoutes = require("./routes/admin.route");
 const userRoutes = require("./routes/user.route");
+const connectDB = require("./config/db");
 
 const app = express();
 
@@ -25,14 +26,7 @@ app.use("/api/solve", submissionRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
 
-const mongoConnection = process.env.MONGO_URI;
-mongoose
-  .connect(mongoConnection)
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err.message);
-    process.exit(1);
-  });
+connectDB();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
