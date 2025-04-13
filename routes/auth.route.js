@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { signup, login } = require("../controller/auth.controller");
+const { register, login } = require("../controller/auth.controller");
+const { getUploader } = require("../middlewares/upload");
 
-router.post("/signup", signup);
+const upload = getUploader("users");
+
+router.post("/register", upload.single("image"), register);
 router.post("/login", login);
 
 module.exports = router;

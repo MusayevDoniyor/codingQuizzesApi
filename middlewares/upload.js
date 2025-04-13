@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const ensureUploadPathExists = (folder) => {
-  const uploadPath = path.join(`../uploads/${folder}`);
+  const uploadPath = path.join(`./uploads/${folder}`);
   if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath, { recursive: true });
 
   return uploadPath;
@@ -17,10 +17,10 @@ const getMulterStorage = (folder = "general") => {
       cb(null, ensureUploadPathExists(folder));
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.round() * 1e9);
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
       const ext = path.extname(file.originalname);
 
-      cb(null, file.filename + "-" + uniqueSuffix + ext);
+      cb(null, file.fieldname + "-" + uniqueSuffix + ext);
     },
   });
 };
@@ -34,8 +34,10 @@ const getUploader = (
     limits,
     fileFilter: function (req, file, cb) {
       const allowedTypes = /jpeg|jpg|png|gif|webp/;
+
       const extname = allowedTypes.test;
       path.extname(file.originalname).toLowerCase();
+
       const mimeType = allowedTypes.test(file.mimetype);
 
       if (mimeType && extname) cb(null, true);

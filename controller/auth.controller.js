@@ -1,9 +1,12 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    const userImage = req.file
+      ? `/uploads/users/${req.file.filename}`
+      : "/uploads/users/default/default_profile.jpg";
 
     if (password.length < 6) {
       return res
@@ -24,10 +27,10 @@ const signup = async (req, res) => {
       });
     }
 
-    let user = new User({ username, email, password });
+    let user = new User({ username, email, password, image: userImage });
     await user.save();
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
     console.error(error.message);
@@ -64,4 +67,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+module.exports = { register, login };

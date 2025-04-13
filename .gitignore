@@ -1,3 +1,5 @@
 .env
 node_modules
-Readme.txt
+Readme.md
+package-lock.json
+uploads
